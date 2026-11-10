@@ -1,206 +1,88 @@
-# TMA4320 Prosjekt 1
-Denne teksten beskriver hvordan dere kan sette opp prosjektet, installere nødvendige pakker, og kjøre koden lokalt på deres maskin. Følg instruksjonene nøye for å sikre at alt fungerer som det skal.
 
-> *OBS:* En del har hatt problemer med å installere Jax på Mac med Intel-chip. Se i bunnen av denne filen for en fremgangsmåte!
+# Physics-Informed Neural Networks (PINNs)
 
+**TMA4320 – Introduction to Scientific Computation | NTNU**
 
-## Laste ned koden
+## Overview
 
-Følg instruksjonene i Git-forelesningen for å kopiere koden som en template og laste den ned til deres maskin. For de som ikke ønsker å bruke Git, kan dere laste ned en `zip`-fil med koden direkte fra GitHub og pakke den ut på deres maskin.
+Academic group project exploring the use of numerical methods, neural networks, and Physics-Informed Neural Networks (PINNs) to model heat distribution in a two-dimensional room.
 
+The project investigates how physical laws can be incorporated into machine learning models to improve temperature predictions based on limited and noisy sensor data.
 
-## Åpne prosjektet i en kode-editor
+Three modelling approaches were studied:
+1. Finite Difference Method (FDM)
+2. Neural Networks (NN)
+3. Physics-Informed Neural Networks (PINN)
 
+## Technologies
 
-For å kjøre kommandoene nedenfor trenger dere også tilgang til en terminal. Det letteste er å åpne prosjektet i VSCode og bruke den innebygde terminalen (åpnes med `Ctrl`/`Cmd`+`j`). Eventuelt bruk terminalen på deres maskin direkte, men husk å navigere til mappen med koden først.
+- Python
+- JAX
+- NumPy
+- Matplotlib
+- Neural Networks
+- Numerical Methods
+- Scientific Computing
 
-## Installere Python
+## Project Components
 
-Verifiser at dere har installert Python 3.13 eller nyere på deres maskin. Dette kan dere gjøre ved å åpne terminalen og skrive `python --version` eller `python3 --version`.
+### 1. Numerical Heat Equation Solver
 
-```bash
-python --version
-# eller evt. (avhengig av systemet deres)
-python3 --version
-```
+Worked with a finite difference solver to simulate heat distribution over time.
 
-Dersom dere får opp en versjon som er 3.13 eller nyere, er alt i orden. Hvis ikke, må dere installere Python. Følg instruksjonene på [Python Downloads](https://www.python.org/downloads/) for å installere nyeste versjon av Python på deres maskin.
+The work included:
+- Discretizing the two-dimensional heat equation
+- Applying implicit Euler time integration
+- Incorporating Robin boundary conditions
+- Solving linear systems for temperature evolution
+- Generating synthetic temperature sensor data
+- Visualizing heat distribution over time
 
-> Merk: Dersom dere måtte skrive `python3` for å få opp riktig versjon, må dere bruke `python3` i stedet for `python` i alle kommandoer nedenfor`
+### 2. Neural Networks
 
-## Installere pakker i et virtuelt miljø
+Implemented and trained a neural network to predict temperature distributions from simulated sensor measurements.
 
-For å kjøre koden trenger dere å installere noen Python-pakker og sette opp et virtuelt miljø. Fra tidligere er dere nok mest vant med å bruke pip og venv for å håndtere dette. Et mer moderne alternativ er å bruke [uv](https://uv.astral.sh/). Personlig synes jeg dette er et enklere og bedre verktøy for dette formålet. Jeg vil beskrive begge fremgangsmåtene, og dere kan selv velge hvilket dere ønsker å bruke.
+The work included:
+- Building a fully connected neural network using JAX
+- Defining loss functions for sensor data and initial conditions
+- Training the network to approximate temperature fields
+- Investigating the effects of sensor placement and measurement noise
+- Comparing neural network predictions with numerical simulations
 
-### pip og venv
+### 3. Physics-Informed Neural Networks
 
-Lag et virtuelt miljø
+Extended the neural network approach by incorporating physical constraints based on the heat equation.
 
-```bash
-python -m venv .venv
-```
+The work included:
+- Integrating physical laws into the training objective
+- Evaluating differential equation residuals
+- Combining data-driven and physics-based loss functions
+- Investigating the influence of training parameters
+- Comparing PINN predictions with conventional neural networks and numerical solutions
 
-Aktiver det virtuelle miljøet
+## Key Findings
 
-```bash
-# Mac/Linux
-source .venv/bin/activate
-# Windows (PowerShell)
-.venv\Scripts\Activate.ps1
-```
+- Numerical simulations provided a reference solution for evaluating machine learning models.
+- Neural networks trained on limited sensor data struggled to reproduce realistic temperature distributions.
+- Increasing the number of sensors improved the quality of temperature predictions.
+- Measurement noise influenced training losses and prediction accuracy.
+- Physics-informed modelling demonstrated the importance of incorporating physical constraints when learning from limited observations.
 
-> **Windows-brukere:** Dersom du får en feilmelding om at skript ikke er tillatt, kjør først denne kommandoen i PowerShell:
-> ```powershell
-> Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-> ```
-> Deretter kan du prøve å aktivere det virtuelle miljøet på nytt.
+## Project Structure
 
-Oppdater pip inne i det virtuelle miljøet
+The project is organized into the following components:
 
-```bash
-pip install --upgrade pip setuptools wheel
-```
+- `src/project/` – Core implementations of the numerical solver, neural networks, and loss functions
+- `scripts/` – Scripts for running simulations, training models, and visualizing results
+- `tests/` – Automated tests
+- `config.yaml` – Physical parameters and model configurations
+- `pyproject.toml` – Python dependencies and project configuration
+- `Project_Report.pdf` – Mathematical derivations, experiments, results, and discussion
 
-Installer pakkene i `pyproject.toml` med kommandoen
+## Academic Context
 
-```bash
-pip install -e . --group dev
-```
+Completed as a group project in TMA4320 – Introduction to Scientific Computation at the Norwegian University of Science and Technology (NTNU).
 
-Dersom du ikke får noen feil har alt gått fint!
+The project combines numerical mathematics, differential equations, machine learning, and scientific programming to investigate data-driven and physics-informed approaches to heat transfer modelling.
 
-### uv
-
-Følg instruksjonene på [Installing uv](https://docs.astral.sh/uv/getting-started/installation/) for å sette opp på deres maskin. Verifiser at uv er installert ved å kjøre
-
-```bash
-uv --version
-```
-
-Dersom dere ønsker kan dere også enkelt installere nyeste version av Python gjennom uv ved å kjøre (merk at dette er valgfritt)
-
-```bash
-uv python install
-```
-Til slutt genererer du et virtuelt miljø og installerer pakker spesifisert i `pyproject.toml` ved å bruke kommandoen
-
-```bash
-uv sync
-```
-
-Du kan eventuelt sette opp en kernel for Jupyter notebooks gjennom
-
-```bash
-uv run ipython kernel install --user --env VIRTUAL_ENV $(pwd)/.venv --name=project
-```
-
-Dersom du ikke får noen feil har alt gått fint!
-
-## Velge Interpreter i VSCode (dersom du bruker dette...)
-Etter du har satt opp prosjektet kan det hende du må velge riktig Python Iinterpreter i VSCode. Åpne kommandopalletten med `Ctrl`/`Cmd`+`Shift`+`P`, og søk etter `Python: Select Interpreter`. Velg deretter den som peker til `.venv`-mappen i prosjektet ditt.
-
-## Kjøre kode
-
-Pass på at ditt virtuelle miljø er aktivert
-
-```bash
-# Mac/Linux
-source .venv/bin/activate
-# Windows (PowerShell)
-.venv\Scripts\Activate.ps1
-```
-
-> **Windows-brukere:** Se merknaden under "pip og venv"-seksjonen dersom du får en feilmelding om at skript ikke er tillatt.
-
-Vi kjører kode fra terminalen gjennom å skrive `python <filsti>`. Test at alt fungerer ved å kjøre `scripts/run_fdm.py` med kommandoen
-
-```bash
-python scripts/run_fdm.py
-```
-
-Dersom du ikke får noen feil så er alle pakker installert riktig, og du er klar til å begynne på prosjektet! Merk at output fra kjøringen vil selvfølgelig være gal siden vi ikke har implementert noe enda.
-
-For å kjøre tester på koden kan du bruke `pytest`. Kjør alle tester med kommandoen
-
-```bash
-pytest
-```
-eller kjør en spesifikk testfil med kommandoen
-
-```bash
-pytest tests/<sti-til-test>.py
-# eller
-pytest tests/<sti-til-test>.py::<test-klassenavn>
-```
-
-## Fiks for å installere på Mac med Intel-chip
-
-For å installere på Mac med Intel-chip, er vi nødt til å bruke Anaconda for å håndtere avhengigheter. 
-
-Pass på å slette eventuelle virtuelle miljøer du har laget tidligere for dette prosjektet før du begynner. Bruk
-```bash
-deactivate
-# Mac/Linux
-rm -rf .venv
-# Windows (PowerShell)
-Remove-Item -Recurse -Force .venv
-```
-
-
-Sjekk om du har Anaconda installert ved å kjøre
-```bash
-conda --version
-```
-Dersom du ikke har det, installer Anaconda herfra: https://www.anaconda.com/download. Etter du har installert Anaconda kan det hende du initialiserer conda med kommandoen
-```bash
-# Dersom du bruker bash
-conda init bash
-# Dersom du bruker zsh
-conda init zsh
-# Dersom du bruker powershell
-conda init powershell
-```
-Deretter må du lukke og åpne terminalen på nytt for at endringene skal tre i kraft.
-
-Erstatt `pyproject.toml` med innholdet
-```toml
-[project]
-name = "project"
-version = "0.1.0"
-description = "PINN for room heating simulation"
-readme = "README.md"
-authors = [
-    { name = "Elling Svee", email = "86355496+ellingsvee@users.noreply.github.com" }
-]
-requires-python = ">=3.12"
-dependencies = []
-
-[dependency-groups]
-dev = []
-```
-
-Lag et conda-miljø for Python 3.12:
-```bash
-conda create -n project python=3.12
-conda activate project
-```
-Dersom du bruker VSCode, åpne kommandopalletten med `Ctrl`/`Cmd`+`Shift`+`P`, og søk etter `Python: Select Interpreter`. Velg deretter den som peker til conda-miljøet du nettopp laget. På denne måten slipper du å aktivere miljøet manuelt hver gang du åpner prosjektet i VSCode.
-
-Kjør deretter kommandoen for å aktivere prosjektet:
-```bash
-pip install -e .
-```
-
-Installer så Jax
-```bash
-conda install -c conda-forge jax jaxlib
-```
-og deretter resten av avhengighetene:
-```bash
-conda install numpy scipy matplotlib tqdm pytest pyyaml ipykernel 
-```
-Test at alt fungerer ved å kjøre `scripts/run_fdm.py` med kommandoen
-
-```bash
-python scripts/run_fdm.py
-```
+**Group members:** Andrine Holen, Selma Holmen Berg, and Emily Ann Mercer.
